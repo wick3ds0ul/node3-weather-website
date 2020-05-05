@@ -1,11 +1,12 @@
 const path = require('path');
 const express = require('express');
 const hbs = require('hbs');
-const geoCode = require("./utils/geocode");
-const foreCast = require("./utils/forecast");
+const geoCode = require('./utils/geocode');
+const foreCast = require('./utils/forecast');
 
 const app = express();
 
+const port = process.env.PORT || 3000;
 // Define Paths for Express Config
 const publicDirectoryPath = path.join(__dirname, '../public');
 const viewsPath = path.join(__dirname, '../template/views');
@@ -44,30 +45,26 @@ app.get('/help', (req, res) => {
 app.get('/weather', (req, res) => {
   if (!req.query.address) {
     return res.send({
-      error: 'You must povide an address'
-    })
+      error: 'You must povide an address',
+    });
   }
-  geoCode(req.query.address, (error, {
-    lat,
-    long,
-    place
-  } = {}) => {
+  geoCode(req.query.address, (error, { lat, long, place } = {}) => {
     if (error) {
       // return console.error(error);
       return res.send({
-        error
-      })
+        error,
+      });
     }
     foreCast(lat, long, (error, foreCastData) => {
       if (error) {
         return res.send({
-          error
+          error,
         });
       }
       res.send({
         loacation: place,
         address: req.query.address,
-        message: foreCastData
+        message: foreCastData,
       });
     });
   });
@@ -82,33 +79,31 @@ app.get('/weather', (req, res) => {
 app.get('/products', (req, res) => {
   if (!req.query.search) {
     return res.send({
-      error: 'Serach term not provided.Please provide a serach term'
-    })
+      error: 'Serach term not provided.Please provide a serach term',
+    });
   }
-  console.log(req.query)
+  console.log(req.query);
   res.send({
-    products: []
-  })
-})
+    products: [],
+  });
+});
 
 app.get('/help/*', (req, res) => {
   res.render('404', {
     title: '404',
     name: 'Prabhakar Maity',
-    errorMessage: 'Help article not found'
-  })
-})
+    errorMessage: 'Help article not found',
+  });
+});
 
 app.get('*', (req, res) => {
   res.render('404', {
     title: '404',
     name: 'Prabhakar Maity',
-    errorMessage: 'Not Found'
+    errorMessage: 'Not Found',
+  });
+});
 
-  })
-})
-
-
-app.listen(3000, () => {
-  console.log(`Server is up on port,3000`);
+app.listen(port, () => {
+  console.log(`Server is up on port,${port}`);
 });
