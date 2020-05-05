@@ -1,6 +1,6 @@
 const request = require('request')
 const foreCast = (lat, long, callback) => {
-    const url =        `http://api.weatherstack.com/current?access_key=006d9f16fcdb939e7744f5dde050a3ca&query=${long},${lat}&units=m`;
+    const url = `http://api.weatherstack.com/current?access_key=006d9f16fcdb939e7744f5dde050a3ca&query=${long},${lat}&units=m`;
     request({
             url,
             json: true,
@@ -14,7 +14,7 @@ const foreCast = (lat, long, callback) => {
                 callback("Unable to find location", undefined);
             } else {
                 callback(undefined,
-                    `Let's see outisde! Looks ${body.current.weather_descriptions[0]}. Current Temperature is ${body.current.temperature} degrees but it feels like ${body.current.feelslike}`
+                    `Let's see outisde! Looks ${body.current.weather_descriptions[0]}. Current Temperature is ${body.current.temperature} degrees but it feels like ${body.current.feelslike}. Humidity is ${body.current.humidity}.`
                 )
             }
         }
